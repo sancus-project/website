@@ -12,6 +12,8 @@ import (
 	reuseport "github.com/kavu/go_reuseport"
 	"github.com/pborman/getopt/v2"
 	"github.com/rs/seamless"
+
+	"github.com/amery/go-webpack-starter/static"
 )
 
 var (
@@ -45,6 +47,11 @@ func main() {
 	s := &http.Server{
 		Addr:    listenAddr,
 		Handler: http.HandlerFunc(Handler),
+	}
+
+	if !*devFlag {
+		// service hashified statics on non-dev mode
+		s.Handler = static.Handler(true, s.Handler)
 	}
 
 	if !*devFlag && *gracefulTimeout > 0 {
@@ -83,6 +90,7 @@ func main() {
 			log.Fatal(err)
 		}
 
+		log.Print(fmt.Sprintf("Listening %s", s.Addr))
 		err = s.Serve(l)
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)
