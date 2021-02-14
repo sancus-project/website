@@ -10,6 +10,7 @@ all: build
 #
 clean:
 	git ls-files -o static/ | xargs -rt rm
+	go mod tidy
 
 # fmt
 #
@@ -18,15 +19,20 @@ fmt:
 
 # build
 #
-.PHONY: go-build npm-build
+.PHONY: go-build go-generate npm-build
 
 go-build:
 	go get -v ./...
 
+go-generate:
+	go get -v github.com/amery/file2go/cmd/file2go
+	cd static && GO111MODULE=off find * -type f ! -name .gitignore -a ! -name '*.go' \
+		| sort -V | xargs -t file2go -p static -o files.go
+
 npm-build:
 	npm run build
 
-build: npm-build go-build
+build: npm-build go-generate go-build
 
 # run
 #
