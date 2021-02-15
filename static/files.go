@@ -26034,10 +26034,10 @@ func init() {
 
 	// Redirects
 	Redirects = make(map[string]string, 6)
-	Redirects["/css/index.css"] = "/css/index-9f0ab9259351.css"
-	Redirects["/css/index.css.map"] = "/css/index-9f0ab9259351.css.map"
-	Redirects["/css/index.js"] = "/css/index-da39a3ee5e6b.js"
-	Redirects["/js/index.js"] = "/js/index-07175d1dcb64.js"
-	Redirects["/js/index.js.LICENSE.txt"] = "/js/index-07175d1dcb64.js.LICENSE.txt"
-	Redirects["/js/index.js.map"] = "/js/index-07175d1dcb64.js.map"
+	Redirects["/css/index.css"] = "index-9f0ab9259351.css"
+	Redirects["/css/index.css.map"] = "index-9f0ab9259351.css.map"
+	Redirects["/css/index.js"] = "index-da39a3ee5e6b.js"
+	Redirects["/js/index.js"] = "index-07175d1dcb64.js"
+	Redirects["/js/index.js.LICENSE.txt"] = "index-07175d1dcb64.js.LICENSE.txt"
+	Redirects["/js/index.js.map"] = "index-07175d1dcb64.js.map"
 }
