@@ -26023,9 +26023,9 @@ func init() {
 	// HashifiedFiles
 	HashifiedFiles = make(map[string]*static.Content, 6)
 	HashifiedFiles["/css/index-9f0ab9259351.css"] = &f_css_index_css
-	HashifiedFiles["/css/index.css-7e3bf5d59911.map"] = &f_css_index_css_map
+	HashifiedFiles["/css/index-9f0ab9259351.css.map"] = &f_css_index_css_map
 	HashifiedFiles["/css/index-da39a3ee5e6b.js"] = &f_css_index_js
 	HashifiedFiles["/js/index-07175d1dcb64.js"] = &f_js_index_js
-	HashifiedFiles["/js/index.js.LICENSE-9a7fa56bb5fd.txt"] = &f_js_index_js_LICENSE_txt
-	HashifiedFiles["/js/index.js-a79e1651fe57.map"] = &f_js_index_js_map
+	HashifiedFiles["/js/index-07175d1dcb64.js.LICENSE.txt"] = &f_js_index_js_LICENSE_txt
+	HashifiedFiles["/js/index-07175d1dcb64.js.map"] = &f_js_index_js_map
 }
