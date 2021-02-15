@@ -12723,8 +12723,13 @@ var f_css_index_css_map = static.Content{
 
 // css/index.js
 var f_css_index_js = static.Content{
-	ContentType: "application/javascript; charset=utf-8",
-	Body:        []byte{},
+	ContentType: "application/x-empty",
+	Body: []byte{
+		0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x02, 0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0x01,
+		0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00},
+	Sha1sum: "da39a3ee5e6b4b0d3255bfef95601890afd80709",
 }
 
 // js/index.js
@@ -25992,28 +25997,12 @@ var f_js_index_js_map = static.Content{
 }
 
 var Files map[string]*static.Content
-
-var hashifiedMap map[string]string
-var hashifiedFiles map[string]*static.Content
-
-func HashifiedMap(files map[string]*static.Content) map[string]string {
-	if hashifiedMap == nil {
-		hashifiedMap, hashifiedFiles = static.Hashify(files)
-	}
-	return hashifiedMap
-}
-
-func HashifiedFiles(files map[string]*static.Content) map[string]*static.Content {
-	if hashifiedFiles == nil {
-		hashifiedMap, hashifiedFiles = static.Hashify(files)
-	}
-	return hashifiedFiles
-}
+var HashifiedFiles map[string]*static.Content
 
 func Handler(hashify bool, next http.Handler) http.Handler {
 	var files map[string]*static.Content
 	if hashify {
-		files = HashifiedFiles(Files)
+		files = HashifiedFiles
 	} else {
 		files = Files
 	}
@@ -26022,12 +26011,21 @@ func Handler(hashify bool, next http.Handler) http.Handler {
 }
 
 func init() {
+	// Files
 	Files = make(map[string]*static.Content, 6)
-
 	Files["/css/index.css"] = &f_css_index_css
 	Files["/css/index.css.map"] = &f_css_index_css_map
 	Files["/css/index.js"] = &f_css_index_js
 	Files["/js/index.js"] = &f_js_index_js
 	Files["/js/index.js.LICENSE.txt"] = &f_js_index_js_LICENSE_txt
 	Files["/js/index.js.map"] = &f_js_index_js_map
+
+	// HashifiedFiles
+	HashifiedFiles = make(map[string]*static.Content, 6)
+	HashifiedFiles["/css/index-9f0ab9259351.css"] = &f_css_index_css
+	HashifiedFiles["/css/index.css-7e3bf5d59911.map"] = &f_css_index_css_map
+	HashifiedFiles["/css/index-da39a3ee5e6b.js"] = &f_css_index_js
+	HashifiedFiles["/js/index-07175d1dcb64.js"] = &f_js_index_js
+	HashifiedFiles["/js/index.js.LICENSE-9a7fa56bb5fd.txt"] = &f_js_index_js_LICENSE_txt
+	HashifiedFiles["/js/index.js-a79e1651fe57.map"] = &f_js_index_js_map
 }
