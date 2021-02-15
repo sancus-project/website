@@ -13,7 +13,7 @@ import (
 	"github.com/pborman/getopt/v2"
 	"github.com/rs/seamless"
 
-	"github.com/amery/go-webpack-starter/static"
+	"github.com/amery/go-webpack-starter/assets"
 )
 
 var (
@@ -51,7 +51,7 @@ func main() {
 
 	if !*devFlag {
 		// service hashified statics on non-dev mode
-		s.Handler = static.Handler(true, s.Handler)
+		s.Handler = assets.Handler(true, s.Handler)
 	}
 
 	if !*devFlag && *gracefulTimeout > 0 {

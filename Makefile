@@ -24,10 +24,12 @@ fmt:
 go-build:
 	go get -v ./...
 
-go-generate:
-	go get -v github.com/amery/file2go/cmd/file2go
-	cd static && GO111MODULE=off find * -type f ! -name .gitignore -a ! -name '*.go' \
-		| sort -V | xargs -t file2go -p static -o files.go
+go-generate: assets/files.go
+
+assets/files.go: FORCE
+	[ -x "`which file2go`" ] || go get -v github.com/amery/file2go/cmd/file2go
+	cd assets; find * -type f ! -name .gitignore -a ! -name '*.go' \
+		| sort -V | xargs -t file2go -p assets -o files.go
 
 npm-build:
 	npm run build
@@ -38,3 +40,6 @@ build: npm-build go-generate go-build
 #
 run:
 	go run -v ./cmd/server -p $(PORT) -t 0
+
+.PHONY: FORCE
+FORCE:

@@ -1,6 +1,6 @@
-//go:generate file2go -p static -o files.go css/index.css css/index.css.map css/index.js js/index.js js/index.js.LICENSE.txt js/index.js.map
+//go:generate file2go -p assets -o files.go css/index.css css/index.css.map css/index.js js/index.js js/index.js.LICENSE.txt js/index.js.map
 
-package static
+package assets
 
 import (
 	"net/http"
