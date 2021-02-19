@@ -41,8 +41,8 @@ $(GOPATH)/bin/file2go:
 clean:
 	go clean -x -r -modcache
 	git ls-files -o assets/ | xargs -rt rm
-	rm -rf $(B)
-	rm -f $(GENERATED_GO_FILES)
+	rm -rf $(B) node_modules/
+	rm -f $(GENERATED_GO_FILES) npm-shrinkwrap.json package-lock.json
 
 # fmt
 #
