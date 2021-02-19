@@ -26,6 +26,8 @@ ALL_FILE_MK_FILES = $(ASSETS_FILES_MK) \
 
 ASSETS_GO_FILE = assets/files.go
 
+GENERATED_GO_FILES = $(ASSETS_GO_FILE)
+
 all: build
 
 # helpers
@@ -38,7 +40,7 @@ $(GOPATH)/bin/file2go:
 clean:
 	git ls-files -o assets/ | xargs -rt rm
 	rm -rf $(B)
-	go mod tidy
+	rm -f $(GENERATED_GO_FILES)
 
 # fmt
 #
@@ -66,10 +68,9 @@ $(ASSETS_FILES_FILE) $(NPM_FILES_FILE): FORCE
 		rm $@~; \
 	fi
 
-$(GO_FILES_FILE): $(ASSETS_GO_FILE)
 $(GO_FILES_FILE): FORCE
 	@mkdir -p $(dir $@)
-	@find * -name '*.go' | sort -V > $@~
+	@(find * -name '*.go'; echo $(GENERATED_GO_FILES) | tr ' ' '\n') | sed -e '/^[ \t]*$$/d;' | sort -uV > $@~
 	@if ! cmp -s $@ $@~; then \
 		mv $@~ $@; \
 		echo $@ updated; \
@@ -115,7 +116,7 @@ include $(GO_FILES_MK)
 $(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(GOPATH)/bin/file2go $(ASSETS_FILES)
 	cut -d/ -f2- < $< | (cd $(@D); xargs -t file2go -p assets -o $(@F))
 
-go-build: $(GO_FILES) $(ASSETS_GO_FILE)
+go-build: $(GO_FILES)
 	go get -v ./...
 
 # build
