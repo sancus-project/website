@@ -9,7 +9,7 @@ all: build
 # clean
 #
 clean:
-	git ls-files -o static/ | xargs -rt rm
+	git ls-files -o assets/ | xargs -rt rm
 	go mod tidy
 
 # fmt
