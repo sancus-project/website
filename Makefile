@@ -3,6 +3,7 @@
 MOD = $(shell sed -n -e 's/^module \(.*\)/\1/p' go.mod)
 PORT ?= 8080
 DEV_PORT ?= 8081
+SERVER ?= server
 
 B = $(CURDIR)/build
 
@@ -127,7 +128,12 @@ build: go-build
 # run
 #
 run:
-	go run -v ./cmd/server -p $(PORT) -t 0
+	go run -v ./cmd/$(SERVER) -p $(PORT) -t 0
 
+dev: go-build
+	set -x; $(GOPATH)/bin/$(SERVER) -p $(DEV_PORT) --dev & trap "kill $$!" EXIT; env HOST=0.0.0.0 PORT=$(PORT) BACKEND=$(DEV_PORT) npm start
+
+#
+#
 .PHONY: FORCE
 FORCE:

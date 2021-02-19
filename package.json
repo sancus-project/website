@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "go+webpack stater template",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --color"
+    "start": "webpack serve --config webpack/webpack.config.dev.js",
+    "build": "webpack --config webpack/webpack.config.prod.js --color"
   },
   "author": "Alejandro Mery <amery@geeks.cl>",
   "license": "MIT",
@@ -15,6 +16,7 @@
     "sass": "^1.32.7",
     "sass-loader": "^11.0.1",
     "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
