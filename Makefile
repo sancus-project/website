@@ -38,6 +38,7 @@ $(GOPATH)/bin/file2go:
 # clean
 #
 clean:
+	go clean -x -r -modcache
 	git ls-files -o assets/ | xargs -rt rm
 	rm -rf $(B)
 	rm -f $(GENERATED_GO_FILES)
