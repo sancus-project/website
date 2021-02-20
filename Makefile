@@ -1,4 +1,4 @@
-.PHONY: all clean build run dev
+.PHONY: all clean deps build run dev
 
 MOD = $(shell sed -n -e 's/^module \(.*\)/\1/p' go.mod)
 PORT ?= 8080
@@ -31,10 +31,30 @@ GENERATED_GO_FILES = $(ASSETS_GO_FILE)
 
 all: build
 
-# helpers
+# deps
 #
-$(GOPATH)/bin/file2go:
+.PHONY: go-deps npm-deps
+
+deps: go-deps npm-deps
+
+GOBIN = $(GOPATH)/bin
+NPM_BIN_PREFIX = $(CURDIR)/node_modules/.bin
+
+FILE2GO = $(GOBIN)/file2go
+WEBPACK = $(NPM_BIN_PREFIX)/webpack
+
+$(FILE2GO):
 	go get -v github.com/amery/file2go/cmd/file2go
+
+$(NPM_BIN_PREFIX)/%:
+	npm i
+	npm shrinkwrap
+
+GO_DEPS = $(FILE2GO)
+NPM_DEPS = $(WEBPACK)
+
+go-deps: $(GO_DEPS)
+npm-deps: $(NPM_DEPS)
 
 # clean
 #
@@ -51,10 +71,10 @@ clean:
 fmt: go-fmt npm-lint
 lint: go-fmt npm-lint
 
-go-fmt:
+go-fmt: go-deps
 	find -name '*.go' | xargs -rt gofmt -l -w -s
 
-npm-lint:
+npm-lint: npm-deps
 	npm run lint
 
 #
@@ -106,13 +126,13 @@ $(ALL_FILE_MK_FILES):
 #
 .PHONY: npm-build
 
-npm-build:
+npm-build: npm-deps
 	npm run build
 	touch $(NPM_BUILT_MARK)
 
 include $(NPM_FILES_MK)
 
-$(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES)
+$(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES) npm-deps
 	npm run build
 	touch $(NPM_BUILT_MARK)
 
@@ -123,10 +143,10 @@ $(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES)
 include $(ASSETS_FILES_MK)
 include $(GO_FILES_MK)
 
-$(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(GOPATH)/bin/file2go $(ASSETS_FILES)
+$(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(FILE2GO) $(ASSETS_FILES)
 	cut -d/ -f2- < $< | (cd $(@D); xargs -t file2go -p assets -o $(@F))
 
-go-build: $(GO_FILES)
+go-build: $(GO_FILES) go-deps
 	go get -v ./...
 
 # build
@@ -135,11 +155,11 @@ build: go-build
 
 # run
 #
-run:
+run: go-deps
 	go run -v ./cmd/$(SERVER) -p $(PORT) -t 0
 
-dev: go-build
-	set -x; $(GOPATH)/bin/$(SERVER) -p $(DEV_PORT) --dev & trap "kill $$!" EXIT; env HOST=0.0.0.0 PORT=$(PORT) BACKEND=$(DEV_PORT) npm start
+dev: go-build npm-deps
+	set -x; $(GOBIN)/$(SERVER) -p $(DEV_PORT) --dev & trap "kill $$!" EXIT; env HOST=0.0.0.0 PORT=$(PORT) BACKEND=$(DEV_PORT) npm start
 
 #
 #
