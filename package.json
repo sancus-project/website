@@ -4,15 +4,26 @@
   "description": "go+webpack stater template",
   "scripts": {
     "start": "webpack serve --config webpack/webpack.config.dev.js",
-    "build": "webpack --config webpack/webpack.config.prod.js --color"
+    "build": "webpack --config webpack/webpack.config.prod.js --color",
+    "lint": "lint-staged && pretty-quick --staged"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint --fix"
+    ],
+    "src/**/*.css": [
+      "styleling --fix"
+    ]
   },
   "author": "Alejandro Mery <amery@geeks.cl>",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^7.0.3",
     "css-loader": "^5.0.2",
+    "lint-staged": "^10.5.4",
     "mini-css-extract-plugin": "^1.3.8",
     "postcss-loader": "^5.0.0",
+    "pretty-quick": "^3.1.0",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
     "webpack-cli": "^4.5.0",

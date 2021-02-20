@@ -1,4 +1,4 @@
-.PHONY: all clean fmt build run
+.PHONY: all clean build run dev
 
 MOD = $(shell sed -n -e 's/^module \(.*\)/\1/p' go.mod)
 PORT ?= 8080
@@ -46,8 +46,16 @@ clean:
 
 # fmt
 #
-fmt:
+.PHONY: fmt lint npm-lint go-fmt
+
+fmt: go-fmt npm-lint
+lint: go-fmt npm-lint
+
+go-fmt:
 	find -name '*.go' | xargs -rt gofmt -l -w -s
+
+npm-lint:
+	npm run lint
 
 #
 # npm.files -> npm.mk -> npm.built -> assets.files -> assets.mk -> assets/file.go
