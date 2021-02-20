@@ -56,7 +56,7 @@ lint: go-fmt npm-lint
 go-fmt: go-deps
 	find -name '*.go' | xargs -rt gofmt -l -w -s
 
-npm-lint: npm-deps
+npm-lint: $(WEBPACK)
 	npm run lint
 
 #
@@ -124,7 +124,7 @@ npm-build: npm-deps
 
 include $(NPM_FILES_MK)
 
-$(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES) npm-deps
+$(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES) $(WEBPACK)
 	npm run build
 	@touch $(NPM_BUILT_MARK)
 
@@ -151,7 +151,7 @@ build: go-build
 run: go-deps
 	go run -v ./cmd/$(SERVER) -p $(PORT) -t 0
 
-dev: go-build npm-deps
+dev: go-build $(WEBPACK)
 	set -x; $(GOBIN)/$(SERVER) -p $(DEV_PORT) --dev & trap "kill $$!" EXIT; env HOST=0.0.0.0 PORT=$(PORT) BACKEND=$(DEV_PORT) npm start
 
 #
