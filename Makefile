@@ -103,7 +103,7 @@ $(ALL_FILE_FILES): FORCE
 	@(for x in $(EXTRA); do echo $$x; done; find $(FIND)) | sed -e '/^[ \t]*$$/d;' | sort -uV > $@~
 	@if ! cmp -s $@ $@~; then \
 		mv $@~ $@; \
-		echo $@ updated; \
+		echo $(@:$(CURDIR)/%=%) updated.; \
 	else \
 		rm $@~; \
 	fi
@@ -112,7 +112,7 @@ $(ALL_FILE_MK_FILES): Makefile
 $(ALL_FILE_MK_FILES):
 	@echo "$(PREFIX)_FILES = $$(cat $< | tr '\n' ' ')" > $@~
 	@mv $@~ $@
-	@echo $@ updated;
+	@echo $(@:$(CURDIR)/%=%) updated.;
 
 # npm-build
 #
@@ -137,7 +137,7 @@ include $(GO_FILES_MK)
 
 $(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(FILE2GO) $(ASSETS_FILES)
 	@cut -d/ -f2- < $< | (cd $(@D); xargs -t file2go -p assets -o $(@F))
-	@echo $@ updated
+	@echo $(@:$(CURDIR)/%=%) updated.;
 
 go-build: $(GO_FILES) go-deps
 	go get -v ./...
