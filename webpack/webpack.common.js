@@ -1,4 +1,5 @@
 // vim: ts=2 sw=2 et
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Path = require('path');
 const Webpack = require('webpack');
@@ -13,6 +14,7 @@ module.exports = {
     filename: '[name].js',
   },
   plugins: [
+    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
