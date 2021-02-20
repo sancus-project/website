@@ -5,7 +5,6 @@
   "requires": true,
   "packages": {
     "": {
-      "name": "go-webpack-starter",
       "version": "1.0.0",
       "license": "MIT",
       "dependencies": {
@@ -22,8 +21,8 @@
         "sass-loader": "^11.0.1",
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2",
-        "webpack-fix-style-only-entries": "^0.6.1",
-        "webpack-merge": "^5.7.3"
+        "webpack-merge": "^5.7.3",
+        "webpack-remove-empty-scripts": "^0.7.1"
       }
     },
     "node_modules/@babel/code-frame": {
@@ -7008,12 +7007,6 @@
         "node": ">=0.10.0"
       }
     },
-    "node_modules/webpack-fix-style-only-entries": {
-      "version": "0.6.1",
-      "resolved": "https://registry.npmjs.org/webpack-fix-style-only-entries/-/webpack-fix-style-only-entries-0.6.1.tgz",
-      "integrity": "sha512-wyIhoxS3DD3Fr9JA8hQPA+ZmaWnqPxx12Nv166wcsI/0fbReqyEtiIk2llOFYIg57WVS3XX5cZJxw2ji70R0sA==",
-      "dev": true
-    },
     "node_modules/webpack-log": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/webpack-log/-/webpack-log-2.0.0.tgz",
@@ -7048,6 +7041,12 @@
       "engines": {
         "node": ">=10.0.0"
       }
+    },
+    "node_modules/webpack-remove-empty-scripts": {
+      "version": "0.7.1",
+      "resolved": "https://registry.npmjs.org/webpack-remove-empty-scripts/-/webpack-remove-empty-scripts-0.7.1.tgz",
+      "integrity": "sha512-9GWBe8TxKUYMalR84L99QjME6W0ptd/pupNqB4Ad4NazouwT+9QJLcfJjl7PDhR/L+qY9JHlzIGdgj0Vv1f3zA==",
+      "dev": true
     },
     "node_modules/webpack-sources": {
       "version": "1.4.3",
@@ -12829,12 +12828,6 @@
         }
       }
     },
-    "webpack-fix-style-only-entries": {
-      "version": "0.6.1",
-      "resolved": "https://registry.npmjs.org/webpack-fix-style-only-entries/-/webpack-fix-style-only-entries-0.6.1.tgz",
-      "integrity": "sha512-wyIhoxS3DD3Fr9JA8hQPA+ZmaWnqPxx12Nv166wcsI/0fbReqyEtiIk2llOFYIg57WVS3XX5cZJxw2ji70R0sA==",
-      "dev": true
-    },
     "webpack-log": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/webpack-log/-/webpack-log-2.0.0.tgz",
@@ -12862,6 +12855,12 @@
         "clone-deep": "^4.0.1",
         "wildcard": "^2.0.0"
       }
+    },
+    "webpack-remove-empty-scripts": {
+      "version": "0.7.1",
+      "resolved": "https://registry.npmjs.org/webpack-remove-empty-scripts/-/webpack-remove-empty-scripts-0.7.1.tgz",
+      "integrity": "sha512-9GWBe8TxKUYMalR84L99QjME6W0ptd/pupNqB4Ad4NazouwT+9QJLcfJjl7PDhR/L+qY9JHlzIGdgj0Vv1f3zA==",
+      "dev": true
     },
     "webpack-sources": {
       "version": "1.4.3",
