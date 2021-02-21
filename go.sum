@@ -1,5 +1,5 @@
-github.com/amery/file2go v0.4.2 h1:1f9GicOhMF9CuYVJi4rcPA5i5I5kR1d8s/P7fyp7tnY=
-github.com/amery/file2go v0.4.2/go.mod h1:Pz974oWG0OFxISLgiktE/acuuRsyvYaAMiDzu8NQCf4=
+github.com/amery/file2go v0.6.0 h1:Tz2ce4JMldfAQq76Srl7BZTue0Nu4+JNNdjAMYsT3y4=
+github.com/amery/file2go v0.6.0/go.mod h1:Pz974oWG0OFxISLgiktE/acuuRsyvYaAMiDzu8NQCf4=
 github.com/kavu/go_reuseport v1.5.0 h1:UNuiY2OblcqAtVDE8Gsg1kZz8zbBWg907sP1ceBV+bk=
 github.com/kavu/go_reuseport v1.5.0/go.mod h1:CG8Ee7ceMFSMnx/xr25Vm0qXaj2Z4i5PWoUx+JZ5/CU=
 github.com/pborman/getopt/v2 v2.1.0 h1:eNfR+r+dWLdWmV8g5OlpyrTYHkhVNxHBdN2cCrJmOEA=
