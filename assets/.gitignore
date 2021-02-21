@@ -1,4 +1,4 @@
-*
-!.gitignore
-!*.go
-files.go
+js/*.js
+js/*.js.*
+css/*.css
+css/*.css.*
