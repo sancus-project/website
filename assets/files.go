@@ -26031,45 +26031,14 @@ var jsIndexJsMap = static.Content{
 	Sha1sum: "061a76db5b410ddcc15ed85361202851dbc83ade",
 }
 
-var Files map[string]*static.Content
-var HashifiedFiles map[string]*static.Content
-var Redirects map[string]string
+var Files = static.NewCollection(
+	static.NewEntry("/css/index.css", "/css/index-9f0ab9259351.css", &cssIndexCss),
+	static.NewEntry("/css/index.css.map", "/css/index-9f0ab9259351.css.map", &cssIndexCssMap),
+	static.NewEntry("/js/index.js", "/js/index-19e22edfe27a.js", &jsIndexJs),
+	static.NewEntry("/js/index.js.LICENSE.txt", "/js/index-19e22edfe27a.js.LICENSE.txt", &jsIndexJsLicenseTxt),
+	static.NewEntry("/js/index.js.map", "/js/index-19e22edfe27a.js.map", &jsIndexJsMap),
+)
 
 func Handler(hashify bool, next http.Handler) http.Handler {
-	var files map[string]*static.Content
-	var redirects map[string]string
-	if hashify {
-		files = HashifiedFiles
-		redirects = Redirects
-	} else {
-		files = Files
-	}
-
-	return static.Handler(files, redirects, next)
-}
-
-func init() {
-	// Files
-	Files = make(map[string]*static.Content, 5)
-	Files["/css/index.css"] = &cssIndexCss
-	Files["/css/index.css.map"] = &cssIndexCssMap
-	Files["/js/index.js"] = &jsIndexJs
-	Files["/js/index.js.LICENSE.txt"] = &jsIndexJsLicenseTxt
-	Files["/js/index.js.map"] = &jsIndexJsMap
-
-	// HashifiedFiles
-	HashifiedFiles = make(map[string]*static.Content, 5)
-	HashifiedFiles["/css/index-9f0ab9259351.css"] = &cssIndexCss
-	HashifiedFiles["/css/index-9f0ab9259351.css.map"] = &cssIndexCssMap
-	HashifiedFiles["/js/index-19e22edfe27a.js"] = &jsIndexJs
-	HashifiedFiles["/js/index-19e22edfe27a.js.LICENSE.txt"] = &jsIndexJsLicenseTxt
-	HashifiedFiles["/js/index-19e22edfe27a.js.map"] = &jsIndexJsMap
-
-	// Redirects
-	Redirects = make(map[string]string, 5)
-	Redirects["/css/index.css"] = "index-9f0ab9259351.css"
-	Redirects["/css/index.css.map"] = "index-9f0ab9259351.css.map"
-	Redirects["/js/index.js"] = "index-19e22edfe27a.js"
-	Redirects["/js/index.js.LICENSE.txt"] = "index-19e22edfe27a.js.LICENSE.txt"
-	Redirects["/js/index.js.map"] = "index-19e22edfe27a.js.map"
+	return Files.Handler(hashify, next)
 }
