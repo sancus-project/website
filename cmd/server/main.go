@@ -51,7 +51,7 @@ func main() {
 
 	if !*devFlag {
 		// service hashified statics on non-dev mode
-		s.Handler = assets.Handler(true, s.Handler)
+		s.Handler = assets.Files.Handler(true, s.Handler)
 	}
 
 	if !*devFlag && *gracefulTimeout > 0 {

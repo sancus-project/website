@@ -3,8 +3,6 @@
 package assets
 
 import (
-	"net/http"
-
 	"github.com/amery/file2go/static"
 )
 
@@ -26038,7 +26036,3 @@ var Files = static.NewCollection(
 	static.NewEntry("/js/index.js.LICENSE.txt", "/js/index-19e22edfe27a.js.LICENSE.txt", &jsIndexJsLicenseTxt),
 	static.NewEntry("/js/index.js.map", "/js/index-19e22edfe27a.js.map", &jsIndexJsMap),
 )
-
-func Handler(hashify bool, next http.Handler) http.Handler {
-	return Files.Handler(hashify, next)
-}
