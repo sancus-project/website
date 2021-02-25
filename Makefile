@@ -8,10 +8,12 @@ NPX_BIN = $(CURDIR)/node_modules/.bin
 
 # tools
 #
-FILE2GO = $(GOBIN)/file2go
 GO = go
 GOFMT = gmfmt -w -l -s
 GOGET = $(GO) get -v
+NPM = npm
+
+FILE2GO = $(GOBIN)/file2go
 WEBPACK = $(NPX_BIN)/webpack
 
 # magic constants
@@ -150,7 +152,7 @@ include $(ASSETS_FILES_MK)
 include $(GO_FILES_MK)
 
 $(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(FILE2GO) $(ASSETS_FILES)
-	@cut -d/ -f2- < $< | (cd $(@D); xargs -t $(FILE2GO) -p assets -o $(@F)
+	@cut -d/ -f2- < $< | (cd $(@D); xargs -t $(FILE2GO) -p assets -o $(@F))
 	@echo $(@:$(CURDIR)/%=%) updated.;
 
 .SECONDARY: $(ASSETS_GO_FILE)
