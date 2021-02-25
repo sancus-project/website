@@ -9,7 +9,8 @@ NPX_BIN = $(CURDIR)/node_modules/.bin
 # tools
 #
 GO = go
-GOFMT = gmfmt -w -l -s
+GOFMT = gmfmt
+GOFMT_FLAGS = -w -l -s
 GOGET = $(GO) get -v
 NPM = npm
 
@@ -67,7 +68,7 @@ fmt: go-fmt npm-lint
 lint: go-fmt npm-lint
 
 go-fmt: $(GO_DEPS)
-	find -name '*.go' | xargs -rt $(GOFMT)
+	find -name '*.go' | xargs -rt $(GOFMT) $(GOFMT_FLAGS)
 
 npm-lint: $(NPN_DEPS)
 	$(NPM) run lint
