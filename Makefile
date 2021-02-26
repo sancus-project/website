@@ -6,15 +6,23 @@ B = $(CURDIR)/build
 GOBIN = $(GOPATH)/bin
 NPX_BIN = $(CURDIR)/node_modules/.bin
 
+# config files
+#
+MODD_RUN_CONF = $(B)/modd-run.conf
+MODD_DEV_CONF = $(B)/modd-dev.conf
+
 # tools
 #
 GO = go
 GOFMT = gofmt
 GOFMT_FLAGS = -w -l -s
-GOGET = $(GO) get -v
+GOGET = $(GO) get
+GOGET_FLAGS = -v
 NPM = npm
 
 FILE2GO = $(GOBIN)/file2go
+MODD = $(GOBIN)/modd
+MODD_FLAGS = -b
 WEBPACK = $(NPX_BIN)/webpack
 
 # magic constants
@@ -36,20 +44,26 @@ all: build
 # deps
 #
 .PHONY: go-deps npm-deps
-
 deps: go-deps npm-deps
 
-$(FILE2GO):
-	$(GOGET) github.com/amery/file2go/cmd/file2go
+# go-deps
+GO_DEPS = $(FILE2GO) $(MODD)
+
+go-deps: $(GO_DEPS)
+
+$(FILE2GO): URL=github.com/amery/file2go/cmd/file2go
+$(MODD): URL=github.com/cortesi/modd/cmd/modd
+
+$(GO_DEPS):
+	$(GOGET) $(GOGET_FLAGS) $(URL)
+
+# npm-deps
+NPM_DEPS = $(WEBPACK)
 
 $(NPXBIN)/%:
 	$(NPM) i
 	$(NPM) shrinkwrap
 
-GO_DEPS = $(FILE2GO)
-NPM_DEPS = $(WEBPACK)
-
-go-deps: $(GO_DEPS)
 npm-deps: $(NPM_DEPS)
 
 # clean
@@ -73,107 +87,65 @@ go-fmt: $(GO_DEPS)
 npm-lint: $(NPN_DEPS)
 	$(NPM) run lint
 
+# run
 #
-# npm.files -> npm.mk -> npm.built -> assets.files -> assets.mk -> assets/file.go
-#
+$(MODD_RUN_CONF): src/modd/run.conf
+$(MODD_DEV_CONF): src/modd/dev.conf
 
-# file listings
-#
-ASSETS_FILES_FILE = $(B)/assets.files
-GO_FILES_FILE     = $(B)/go.files
-NPM_FILES_FILE    = $(B)/npm.files
+$(MODD_RUN_CONF) $(MOD_DEV_CONF):
+	sed \
+		-e "s|@@PORT@@|$(PORT)|g" \
+		-e "s|@@BACKEND@@|$(DEV_PORT)|g" \
+		-e "s|@@NPM@@|$(NPM)|g" \
+		-e "s|@@GO@@|$(GO)|g" \
+		-e "s|@@GOFMT@@|$(GOFMT) $(GOFMT_FLAGS)|g" \
+		-e "s|@@GOGET@@|$(GOGET)|g" \
+		-e "s|@@FILE2GO@@|$(notdir $(FILE2GO))|g" \
+		-e "s|@@SERVER@@|$(SERVER)|g" \
+		$< > $@~
+	mv $@~ $@
 
-ALL_FILE_FILES    = $(ASSETS_FILES_FILE) \
-                    $(GO_FILES_FILE) \
-                    $(NPM_FILES_FILE)
+run: $(MODD_RUN_CONF)
+dev: $(MODD_DEV_CONF)
 
-ASSETS_FILES_MK   = $(B)/assets.mk
-GO_FILES_MK       = $(B)/go.mk
-NPM_FILES_MK      = $(B)/npm.mk
-
-ALL_FILE_MK_FILES = $(ASSETS_FILES_MK) \
-                    $(GO_FILES_MK) \
-                    $(NPM_FILES_MK)
-
-NPM_BUILT_MARK    = $(B)/npm.built
-
-.INTERMEDIATE: $(ALL_FILE_FILES) $(ALL_FILE_MK_FILES) $(NPM_BUILT_MARK)
-
-$(ASSETS_FILES_FILE): $(NPM_BUILT_MARK)
-$(ASSETS_FILES_FILE): FIND = assets/ ! -type d -a ! -name '*.go' -a ! -name '.gitignore'
-$(GO_FILES_FILE):     FIND = * -name '*.go'
-$(GO_FILES_FILE):     EXTRA = $(GENERATED_GO_FILES)
-$(NPM_FILES_FILE):    FIND = src/ ! -type d
-
-$(ASSETS_FILES_MK):   $(ASSETS_FILES_FILE)
-$(GO_FILES_MK):       $(GO_FILES_FILE)
-$(NPM_FILES_MK):      $(NPM_FILES_FILE)
-
-$(ASSETS_FILES_MK):   PREFIX=ASSETS
-$(GO_FILES_MK):       PREFIX=GO
-$(NPM_FILES_MK):      PREFIX=NPM
-
-$(ALL_FILE_FILES): FORCE
-	@mkdir -p $(dir $@)
-	@(for x in $(EXTRA); do echo $$x; done; find $(FIND)) | sed -e '/^[ \t]*$$/d;' | sort -uV > $@~
-	@if ! cmp -s $@ $@~; then \
-		mv $@~ $@; \
-		echo $(@:$(CURDIR)/%=%) updated.; \
-	else \
-		rm $@~; \
-	fi
-
-$(ALL_FILE_MK_FILES): Makefile
-$(ALL_FILE_MK_FILES):
-	@echo "$(PREFIX)_FILES = $$(cat $< | tr '\n' ' ')" > $@~
-	@mv $@~ $@
-	@echo $(@:$(CURDIR)/%=%) updated.;
-
-# npm-build
-#
-.PHONY: npm-build
-
-npm-build: $(NPM_DEPS)
-	@$(NPM) run build
-	@touch $(NPM_BUILT_MARK)
-
-include $(NPM_FILES_MK)
-
-$(NPM_BUILT_MARK): $(NPM_FILES_MK) $(NPM_FILES) $(NPM_DEPS)
-	@$(NPM) run build
-	@touch $(NPM_BUILT_MARK)
-
-.SECONDARY: $(ASSETS_FILES)
-
-# go-build
-#
-.PHONY: go-build
-
-include $(ASSETS_FILES_MK)
-include $(GO_FILES_MK)
-
-$(ASSETS_GO_FILE): $(ASSETS_FILES_FILE) $(FILE2GO) $(ASSETS_FILES)
-	@cut -d/ -f2- < $< | (cd $(@D); xargs -t $(FILE2GO) -p assets -o $(@F))
-	@echo $(@:$(CURDIR)/%=%) updated.;
-
-.SECONDARY: $(ASSETS_GO_FILE)
-
-go-build: $(GO_FILES) go-deps
-	$(GOGET) ./...
+run dev: $(MODD) go-deps npm-deps
+run dev:
+	$(MODD) $(MODD_FLAGS) -f $<
 
 # build
 #
+ASSETS_FILES_FILTER = find $(dir $(ASSETS_GO_FILE)) -type f -a ! -name '*.go' -a ! -name '.*' -a ! -name '*~'
+NPM_FILES_FILTER = find src/ -name '*.js' -o -name '*.scss'
+GO_FILES_FILTER = find */ -name *.go
+
+ASSETS_FILES = $(shell set -x; $(ASSETS_FILES_FILTER))
+NPM_FILES = $(shell set -x; $(NPM_FILES_FILTER))
+GO_FILES = $(shell set -x; $(GO_FILES_FILTER)) $(GENERATED_GO_FILES)
+
+.PHONY: npm-build go-build
+
 build: go-build
 
-# run
-#
-run: go-deps
-	$(GO) run -v ./cmd/$(SERVER) -p $(PORT) -t 0
+# npm-build
+NPM_BUILT_MARK = $(B)/.npm-built
 
-dev: go-build $(WEBPACK)
-	set -x; $(GOBIN)/$(SERVER) -p $(DEV_PORT) --dev & trap "kill $$!" EXIT; env HOST=0.0.0.0 PORT=$(PORT) BACKEND=$(DEV_PORT) npm start
+$(NPM_BUILT_MARK): $(NPM_FILES) npm-deps Makefile
+	@$(NPM) run build
+	@mkdir -p $(@D)
+	@touch $@
 
-#
-#
-.PHONY: FORCE
-FORCE:
+npm-build: npm-deps
+	@$(NPM) run build
+	@mkdir -p $(dirname $(BPN_BUILT_MARK))
+	@touch $(NPM_BUILT_MARK)
+
+.INTERMEDIATE: $(NPM_BUILT_MARK)
+
+# go-build
+$(ASSETS_GO_FILE): $(NPM_BUILT_MARK) $(FILE2GO) $(ASSETS_FILES)
+	$(ASSETS_FILES_FILTER) | sort -uV | sed -e 's|^$(@D)/||' | (cd $(@D) && xargs -t $(notdir $(FILE2GO)) -p assets -o $(@F))
+
+go-build: $(GO_FILES) go-deps
+	$(GOGET) $(GOGET_FLAGS) ./...
+
+.SECONDARY: $(GOBIN)/$(SERVER)
