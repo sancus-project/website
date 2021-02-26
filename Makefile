@@ -64,7 +64,9 @@ $(NPXBIN)/%:
 	$(NPM) i
 	$(NPM) shrinkwrap
 
-npm-deps: $(NPM_DEPS)
+npm-deps:
+	$(NPM) i
+	$(NPM) shrinkwrap
 
 # clean
 #
@@ -81,10 +83,10 @@ clean:
 fmt: go-fmt npm-lint
 lint: go-fmt npm-lint
 
-go-fmt: $(GO_DEPS)
+go-fmt: $(GO_DEPS) FORCE
 	find -name '*.go' | xargs -rt $(GOFMT) $(GOFMT_FLAGS)
 
-npm-lint: $(NPN_DEPS)
+npm-lint: $(NPM_DEPS) FORCE
 	$(NPM) run lint
 
 # run
@@ -108,7 +110,7 @@ $(MODD_RUN_CONF) $(MOD_DEV_CONF):
 run: $(MODD_RUN_CONF)
 dev: $(MODD_DEV_CONF)
 
-run dev: $(MODD) go-deps npm-deps
+run dev: $(MODD) go-deps $(NPM_DEPS)
 run dev:
 	$(MODD) $(MODD_FLAGS) -f $<
 
@@ -129,12 +131,12 @@ build: go-build
 # npm-build
 NPM_BUILT_MARK = $(B)/.npm-built
 
-$(NPM_BUILT_MARK): $(NPM_FILES) npm-deps Makefile
+$(NPM_BUILT_MARK): $(NPM_FILES) $(NPM_DEPS) Makefile
 	@$(NPM) run build
 	@mkdir -p $(@D)
 	@touch $@
 
-npm-build: npm-deps
+npm-build: $(NPM_DEPS) FORCE
 	@$(NPM) run build
 	@mkdir -p $(dirname $(BPN_BUILT_MARK))
 	@touch $(NPM_BUILT_MARK)
@@ -145,7 +147,11 @@ npm-build: npm-deps
 $(ASSETS_GO_FILE): $(NPM_BUILT_MARK) $(FILE2GO) $(ASSETS_FILES)
 	$(ASSETS_FILES_FILTER) | sort -uV | sed -e 's|^$(@D)/||' | (cd $(@D) && xargs -t $(notdir $(FILE2GO)) -p assets -o $(@F))
 
-go-build: $(GO_FILES) go-deps
+go-build: $(GO_FILES) $(GO_DEPS) FORCE
 	$(GOGET) $(GOGET_FLAGS) ./...
 
-.SECONDARY: $(GOBIN)/$(SERVER)
+$(GOBIN)/$(SERVER): $(GO_FILES) $(GO_DEPS)
+	$(GOGET) $(GOGET_FLAGS) ./cmd/$(@F)
+
+# FORCE
+.PHONY: FORCE
