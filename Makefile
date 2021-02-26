@@ -118,7 +118,7 @@ run dev:
 #
 ASSETS_FILES_FILTER = find $(dir $(ASSETS_GO_FILE)) -type f -a ! -name '*.go' -a ! -name '.*' -a ! -name '*~'
 NPM_FILES_FILTER = find src/ -name '*.js' -o -name '*.scss'
-GO_FILES_FILTER = find */ -name *.go
+GO_FILES_FILTER = find */ -name node_modules -prune -name '*.go'
 
 ASSETS_FILES = $(shell set -x; $(ASSETS_FILES_FILTER))
 NPM_FILES = $(shell set -x; $(NPM_FILES_FILTER))
