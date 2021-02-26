@@ -9,7 +9,7 @@ NPX_BIN = $(CURDIR)/node_modules/.bin
 # tools
 #
 GO = go
-GOFMT = gmfmt
+GOFMT = gofmt
 GOFMT_FLAGS = -w -l -s
 GOGET = $(GO) get -v
 NPM = npm
