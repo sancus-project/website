@@ -91,9 +91,23 @@ npm-lint: $(NPM_DEPS) FORCE
 
 # run
 #
-$(B)/modd-%.conf: src/modd/%.conf
+MODD_CONF_FILES = $(MODD_RUN_CONF) $(MODD_DEV_CONF)
+
+.PHONY: modd-conf
+
+modd-conf: $(MODD_CONF_FILES)
+
+# TODO: rework these using patterns
+$(MODD_RUN_CONF): MODE=run
+$(MODD_RUN_CONF): src/modd/run.conf
+
+$(MODD_DEV_CONF): MODE=dev
+$(MODD_DEV_CONF): src/modd/dev.conf
+
+$(MODD_CONF_FILES): Makefile
+$(MODD_CONF_FILES):
 	@mkdir -p $(@D)
-	sed \
+	@sed \
 		-e "s|@@PORT@@|$(PORT)|g" \
 		-e "s|@@BACKEND@@|$(DEV_PORT)|g" \
 		-e "s|@@NPM@@|$(NPM)|g" \
@@ -102,8 +116,10 @@ $(B)/modd-%.conf: src/modd/%.conf
 		-e "s|@@GOGET@@|$(GOGET)|g" \
 		-e "s|@@FILE2GO@@|$(notdir $(FILE2GO))|g" \
 		-e "s|@@SERVER@@|$(SERVER)|g" \
+		-e "s|@@MODE@@|$(MODE)|g" \
 		$< > $@~
-	mv $@~ $@
+	@mv $@~ $@
+	@echo ${@F} updated.
 
 run: $(MODD_RUN_CONF)
 dev: $(MODD_DEV_CONF)
