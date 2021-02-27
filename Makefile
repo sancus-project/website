@@ -91,10 +91,8 @@ npm-lint: $(NPM_DEPS) FORCE
 
 # run
 #
-$(MODD_RUN_CONF): src/modd/run.conf
-$(MODD_DEV_CONF): src/modd/dev.conf
-
-$(MODD_RUN_CONF) $(MOD_DEV_CONF):
+$(B)/modd-%.conf: src/modd/%.conf
+	@mkdir -p $(@D)
 	sed \
 		-e "s|@@PORT@@|$(PORT)|g" \
 		-e "s|@@BACKEND@@|$(DEV_PORT)|g" \
