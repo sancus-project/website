@@ -15,6 +15,7 @@ import (
 	"github.com/pborman/getopt/v2"
 
 	"github.com/amery/go-webpack-starter/assets"
+	"github.com/amery/go-webpack-starter/html"
 )
 
 var (
@@ -54,9 +55,13 @@ func main() {
 		Handler: http.HandlerFunc(Handler),
 	}
 
-	if !*devFlag {
-		// service hashified statics on non-dev mode
-		s.Handler = assets.Files.Handler(true, s.Handler)
+	// service hashified statics on non-dev mode
+	s.Handler = assets.Files.Handler(!*devFlag, s.Handler)
+	// bind assets to html templates
+	html.Files.BindStaticCollection(!*devFlag, assets.Files)
+	// and compile templates
+	if err := html.Files.Parse(); err != nil {
+		log.Fatal(err)
 	}
 
 	if *gracefulTimeout > 0 {

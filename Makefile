@@ -35,8 +35,9 @@ SERVER ?= server
 # generated files
 #
 ASSETS_GO_FILE = assets/files.go
+HTML_GO_FILE = html/files.go
 
-GENERATED_GO_FILES = $(ASSETS_GO_FILE)
+GENERATED_GO_FILES = $(ASSETS_GO_FILE) $(HTML_GO_FILE)
 
 # default target
 all: build
@@ -56,6 +57,10 @@ $(MODD): URL=github.com/cortesi/modd/cmd/modd
 
 $(GO_DEPS):
 	$(GOGET) $(GOGET_FLAGS) $(URL)
+
+.PHONY: file2go
+file2go:
+	env GO111MODULE=off $(GOGET) $(GOGET_FLAGS) github.com/amery/file2go/cmd/file2go
 
 # npm-deps
 NPM_DEPS = $(WEBPACK)
@@ -131,10 +136,12 @@ run dev:
 # build
 #
 ASSETS_FILES_FILTER = find $(dir $(ASSETS_GO_FILE)) -type f -a ! -name '*.go' -a ! -name '.*' -a ! -name '*~'
+HTML_FILES_FILTER = find $(dir $(HTML_GO_FILE)) -type f -name '*.gohtml' -o -name '*.html'
 NPM_FILES_FILTER = find src/ -name '*.js' -o -name '*.scss'
 GO_FILES_FILTER = find */ -name node_modules -prune -name '*.go'
 
 ASSETS_FILES = $(shell set -x; $(ASSETS_FILES_FILTER))
+HTML_FILES = $(shell set -x; $(HTML_FILES_FILTER))
 NPM_FILES = $(shell set -x; $(NPM_FILES_FILTER))
 GO_FILES = $(shell set -x; $(GO_FILES_FILTER)) $(GENERATED_GO_FILES)
 
@@ -160,6 +167,9 @@ npm-build: $(NPM_DEPS) FORCE
 # go-build
 $(ASSETS_GO_FILE): $(NPM_BUILT_MARK) $(FILE2GO) $(ASSETS_FILES)
 	$(ASSETS_FILES_FILTER) | sort -uV | sed -e 's|^$(@D)/||' | (cd $(@D) && xargs -t $(notdir $(FILE2GO)) -p assets -o $(@F))
+
+$(HTML_GO_FILE): $(HTML_FILES) $(FILE2GO) Makefile
+	$(HTML_FILES_FILTER) | sort -uV | sed -e 's|^$(@D)/||' | (cd $(@D) && xargs -t $(notdir $(FILE2GO)) -p html -T html -o $(@F))
 
 go-build: $(GO_FILES) $(GO_DEPS) FORCE
 	$(GOGET) $(GOGET_FLAGS) ./...
