@@ -159,7 +159,7 @@ $(NPM_BUILT_MARK): $(NPM_FILES) $(NPM_DEPS) Makefile
 
 npm-build: $(NPM_DEPS) FORCE
 	@$(NPM) run build
-	@mkdir -p $(dirname $(BPN_BUILT_MARK))
+	@mkdir -p $(dir $(NPM_BUILT_MARK))
 	@touch $(NPM_BUILT_MARK)
 
 .INTERMEDIATE: $(NPM_BUILT_MARK)
