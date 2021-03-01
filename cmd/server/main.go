@@ -42,11 +42,9 @@ func main() {
 
 	s := &http.Server{
 		Addr:    listenAddr,
-		Handler: Router(),
+		Handler: Router(!*devFlag),
 	}
 
-	// service hashified statics on non-dev mode
-	s.Handler = assets.Files.Handler(!*devFlag, s.Handler)
 	// bind assets to html templates
 	html.Files.BindStaticCollection(!*devFlag, assets.Files)
 	// and compile templates

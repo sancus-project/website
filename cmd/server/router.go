@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 
+	"github.com/amery/go-webpack-starter/assets"
 	"github.com/amery/go-webpack-starter/html"
 )
 
@@ -34,8 +36,10 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Router() *chi.Mux {
+func Router(hashify bool) *chi.Mux {
 	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Use(assets.Files.Middleware(hashify))
 	r.MethodFunc("GET", "/", HandleIndex)
 
 	return r
