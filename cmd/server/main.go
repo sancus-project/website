@@ -30,29 +30,6 @@ var (
 	gracefulTimeout = getopt.DurationLong("graceful", 't', defaultGraceful, "Maximum duration to wait for in-flight requests")
 )
 
-type View struct {
-	Pid int
-}
-
-func Handler(w http.ResponseWriter, r *http.Request) {
-	if d := r.URL.Query().Get("delay"); d != "" {
-		if delay, err := time.ParseDuration(d); err == nil {
-			time.Sleep(delay)
-		}
-	}
-
-	w.WriteHeader(http.StatusOK)
-
-	vd := View{
-		Pid: os.Getpid(),
-	}
-
-	err := html.Files.ExecuteTemplate(w, "index", vd)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
 func main() {
 
 	// check argments
@@ -65,7 +42,7 @@ func main() {
 
 	s := &http.Server{
 		Addr:    listenAddr,
-		Handler: http.HandlerFunc(Handler),
+		Handler: Router(),
 	}
 
 	// service hashified statics on non-dev mode
