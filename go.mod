@@ -3,7 +3,7 @@ module github.com/amery/go-webpack-starter
 go 1.15
 
 require (
-	github.com/amery/file2go v0.11.0
+	github.com/amery/file2go v0.12.0
 	github.com/cloudflare/tableflip v1.2.2
 	github.com/cortesi/modd v0.0.0-20210222043654-cbdcc23af7d5
 	github.com/go-chi/chi/v5 v5.0.0
