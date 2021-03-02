@@ -30,9 +30,9 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 		Pid: os.Getpid(),
 	}
 
-	err := html.Files.ExecuteTemplate(w, "index", vd)
+	err := html.View("index", vd).Render(w, r)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 }
 
