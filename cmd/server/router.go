@@ -39,7 +39,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 func Router(hashify bool) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Use(assets.Files.Middleware(hashify))
+	r.Use(assets.Middleware(hashify))
 	r.MethodFunc("GET", "/", HandleIndex)
 
 	return r
