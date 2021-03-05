@@ -1,7 +1,7 @@
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20210208195552-ff826a37aa15/go.mod h1:OMCwj8VM1Kc9e19TLln2VL61YJF0x1XFtfdL4JdbSyE=
-github.com/amery/file2go v0.12.0 h1:iisLlw/BtkCkaNmvKEov9+/OyD4VvvhOJTdjoljM+sg=
-github.com/amery/file2go v0.12.0/go.mod h1:Pz974oWG0OFxISLgiktE/acuuRsyvYaAMiDzu8NQCf4=
+github.com/amery/file2go v0.13.0 h1:bAu3BN7LN6Q9VG7ablmHt/3ryAynLj/I4ZNSznlt2L8=
+github.com/amery/file2go v0.13.0/go.mod h1:Pz974oWG0OFxISLgiktE/acuuRsyvYaAMiDzu8NQCf4=
 github.com/bmatcuk/doublestar v1.3.4 h1:gPypJ5xD31uhX6Tf54sDPUOBXTqKH4c9aPY66CyQrS0=
 github.com/bmatcuk/doublestar v1.3.4/go.mod h1:wiQtGV+rzVYxB7WIlirSN++5HPtPlXEo9MEoZQC/PmE=
 github.com/cloudflare/tableflip v1.2.2 h1:WkhiowHlg0nZuH7Y2beLVIZDfxtSvKta1f22PEgUN7w=

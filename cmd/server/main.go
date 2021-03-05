@@ -13,9 +13,6 @@ import (
 
 	"github.com/cloudflare/tableflip"
 	"github.com/pborman/getopt/v2"
-
-	"github.com/amery/go-webpack-starter/assets"
-	"github.com/amery/go-webpack-starter/html"
 )
 
 var (
@@ -43,13 +40,6 @@ func main() {
 	s := &http.Server{
 		Addr:    listenAddr,
 		Handler: Router(!*devFlag),
-	}
-
-	// bind assets to html templates
-	html.Files.BindStaticCollection(!*devFlag, assets.Files)
-	// and compile templates
-	if err := html.Files.Parse(); err != nil {
-		log.Fatal(err)
 	}
 
 	if *gracefulTimeout > 0 {
