@@ -15,37 +15,38 @@ import (
 	"github.com/pborman/getopt/v2"
 )
 
-var (
-	waitStarted     = time.Second // wait one second before considering it started
-	defaultPidFile  = "/tmp/tableflip.pid"
-	defaultPort     = 8080
-	defaultGraceful = 60 * time.Second
+var config = NewConfig()
 
-	devFlag         = getopt.BoolLong("dev", 'd', "Don't hashify static files")
-	portListen      = getopt.Uint16Long("port", 'p', uint16(defaultPort), "HTTP port to listen")
-	pidFile         = getopt.StringLong("pid", 'f', defaultPidFile, "Path to PID file")
-	gracefulTimeout = getopt.DurationLong("graceful", 't', defaultGraceful, "Maximum duration to wait for in-flight requests")
-)
+func init() {
+	getopt.FlagLong(&config.Development, "dev", 'd', "Don't hashify static files")
+	getopt.FlagLong(&config.Port, "port", 'p', "HTTP port to listen")
+	getopt.FlagLong(&config.PIDFile, "pid", 'f', "Path to PID file")
+	getopt.FlagLong(&config.GracefulTimeout, "graceful", 't', "Maximum duration to wait for in-flight requests")
+
+	getopt.Parse()
+
+	// TODO: validate config
+}
 
 func main() {
-
-	// check argments
-	getopt.Parse()
 
 	// setup
 	log.SetPrefix(fmt.Sprintf("pid:%d ", os.Getpid()))
 
-	listenAddr := fmt.Sprintf(":%v", *portListen)
+	listenAddr := fmt.Sprintf(":%v", config.Port)
 
 	s := &http.Server{
-		Addr:    listenAddr,
-		Handler: Router(!*devFlag),
+		Addr:         listenAddr,
+		Handler:      Router(!config.Development),
+		ReadTimeout:  config.ReadTimeout,
+		WriteTimeout: config.WriteTimeout,
+		IdleTimeout:  config.IdleTimeout,
 	}
 
-	if *gracefulTimeout > 0 {
+	if config.GracefulTimeout > 0 {
 		// Graceful restart mode
 		upg, err := tableflip.New(tableflip.Options{
-			PIDFile: *pidFile,
+			PIDFile: config.PIDFile,
 		})
 		if err != nil {
 			log.Fatal(err)
@@ -85,7 +86,7 @@ func main() {
 		<-upg.Exit()
 
 		// graceful shutdown timeout
-		time.AfterFunc(*gracefulTimeout, func() {
+		time.AfterFunc(config.GracefulTimeout, func() {
 			log.Println("Graceful shutdown timed out")
 			os.Exit(1)
 		})
