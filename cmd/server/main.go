@@ -29,30 +29,47 @@ func init() {
 }
 
 func main() {
+	var upg *tableflip.Upgrader
+	var l net.Listener
+	var err error
 
-	// setup
+	// include pid on the logs
 	log.SetPrefix(fmt.Sprintf("pid:%d ", os.Getpid()))
-
-	listenAddr := fmt.Sprintf(":%v", config.Port)
-
-	s := &http.Server{
-		Addr:         listenAddr,
-		Handler:      Router(!config.Development),
-		ReadTimeout:  config.ReadTimeout,
-		WriteTimeout: config.WriteTimeout,
-		IdleTimeout:  config.IdleTimeout,
-	}
 
 	if config.GracefulTimeout > 0 {
 		// Graceful restart mode
-		upg, err := tableflip.New(tableflip.Options{
+		upg, err = tableflip.New(tableflip.Options{
 			PIDFile: config.PIDFile,
 		})
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer upg.Stop()
+	}
 
+	// prepare server
+	s := &http.Server{
+		Addr:         fmt.Sprintf(":%v", config.Port),
+		Handler:      Router(!config.Development),
+		ReadTimeout:  config.ReadTimeout,
+		WriteTimeout: config.WriteTimeout,
+		IdleTimeout:  config.IdleTimeout,
+	}
+
+	// listen service port
+	if upg != nil {
+		l, err = upg.Listen("tcp", s.Addr)
+	} else {
+		l, err = net.Listen("tcp", s.Addr)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Print(fmt.Sprintf("Listening %s", s.Addr))
+
+	if upg != nil {
 		// attempt upgrade on SIGUSR2
 		go func() {
 			sig := make(chan os.Signal, 1)
@@ -64,15 +81,7 @@ func main() {
 			}
 		}()
 
-		// listen service port
-		l, err := upg.Listen("tcp", listenAddr)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Print(fmt.Sprintf("Listening %s", s.Addr))
-
-		// starter servicing
+		// start servicing
 		go func() {
 			err := s.Serve(l)
 			if err != nil && err != http.ErrServerClosed {
@@ -80,6 +89,7 @@ func main() {
 			}
 		}()
 
+		// notify being ready for service
 		if err = upg.Ready(); err != nil {
 			log.Fatal(err)
 		}
@@ -94,12 +104,6 @@ func main() {
 		// Wait for connections to drain.
 		s.Shutdown(context.Background())
 	} else {
-		l, err := net.Listen("tcp", s.Addr)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Print(fmt.Sprintf("Listening %s", s.Addr))
 		err = s.Serve(l)
 		if err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)

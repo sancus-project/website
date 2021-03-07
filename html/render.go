@@ -10,6 +10,7 @@ import (
 )
 
 type ctxKey int
+
 const collectionCtxKey ctxKey = 0
 
 func Middleware(h html.Collection) func(http.Handler) http.Handler {
