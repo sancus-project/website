@@ -25,10 +25,11 @@ type ServerConfig struct {
 
 func NewConfig() ServerConfig {
 	return ServerConfig{
-		PIDFile:      DefaultPIDFile,
-		Port:         DefaultPort,
-		ReadTimeout:  DefaultReadTimeout,
-		WriteTimeout: DefaultWriteTimeout,
-		IdleTimeout:  DefaultIdleTimeout,
+		PIDFile:         DefaultPIDFile,
+		Port:            DefaultPort,
+		ReadTimeout:     DefaultReadTimeout,
+		WriteTimeout:    DefaultWriteTimeout,
+		IdleTimeout:     DefaultIdleTimeout,
+		GracefulTimeout: DefaultGracefulTimeout,
 	}
 }
