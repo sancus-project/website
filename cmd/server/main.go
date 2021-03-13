@@ -57,13 +57,23 @@ func main() {
 
 	log.Print(fmt.Sprintf("Listening %s", l.Addr()))
 
-	// attempt upgrade on SIGUSR2
+	// watch signals
 	go func() {
 		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGUSR2)
-		for range sig {
-			if err := upg.Upgrade(); err != nil {
-				log.Println("Upgrade failed:", err)
+		signal.Notify(sig, syscall.SIGHUP, syscall.SIGUSR2, syscall.SIGINT, syscall.SIGTERM)
+
+		for signum := range sig {
+
+			switch signum {
+			case syscall.SIGHUP, syscall.SIGUSR2:
+				// attempt to upgrade on SIGHUP or SIGUSR2
+				if err := upg.Upgrade(); err != nil {
+					log.Println("Upgrade failed:", err)
+				}
+			case syscall.SIGINT, syscall.SIGTERM:
+				// terminate on SIGINT or SIGTERM
+				log.Println("Terminating...")
+				upg.Stop()
 			}
 		}
 	}()
