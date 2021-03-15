@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/amery/file2go/html"
 	"github.com/go-chi/render"
+	"go.sancus.dev/file2go/html"
 )
 
 type ctxKey int

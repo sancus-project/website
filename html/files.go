@@ -3,8 +3,8 @@
 package html
 
 import (
-	"github.com/amery/file2go/file"
-	"github.com/amery/file2go/html"
+	"go.sancus.dev/file2go/file"
+	"go.sancus.dev/file2go/html"
 )
 
 // index.gohtml

@@ -25,6 +25,9 @@ MODD = $(GOBIN)/modd
 MODD_FLAGS = -b
 WEBPACK = $(NPX_BIN)/webpack
 
+FILE2GO_URL = go.sancus.dev/file2go/cmd/file2go
+MODD_URL = github.com/cortesi/modd/cmd/modd
+
 # magic constants
 #
 MOD = $(shell sed -n -e 's/^module \(.*\)/\1/p' go.mod)
@@ -52,15 +55,15 @@ GO_DEPS = $(FILE2GO) $(MODD)
 
 go-deps: $(GO_DEPS)
 
-$(FILE2GO): URL=github.com/amery/file2go/cmd/file2go
-$(MODD): URL=github.com/cortesi/modd/cmd/modd
+$(FILE2GO): URL=$(FILE2GO_URL)
+$(MODD): URL=$(MODD_URL)
 
 $(GO_DEPS):
 	$(GOGET) $(GOGET_FLAGS) $(URL)
 
 .PHONY: file2go
 file2go:
-	env GO111MODULE=off $(GOGET) $(GOGET_FLAGS) github.com/amery/file2go/cmd/file2go
+	env GO111MODULE=off $(GOGET) $(GOGET_FLAGS) $(FILE2GO_URL)
 
 # npm-deps
 NPM_DEPS = $(WEBPACK)

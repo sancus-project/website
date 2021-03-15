@@ -3,7 +3,7 @@
 package assets
 
 import (
-	"github.com/amery/file2go/static"
+	"go.sancus.dev/file2go/static"
 )
 
 // css/index.css
