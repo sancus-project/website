@@ -945,9 +945,9 @@
       }
     },
     "node_modules/caniuse-lite": {
-      "version": "1.0.30001199",
-      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001199.tgz",
-      "integrity": "sha512-ifbK2eChUCFUwGhlEzIoVwzFt1+iriSjyKKFYNfv6hN34483wyWpLLavYQXhnR036LhkdUYaSDpHg1El++VgHQ==",
+      "version": "1.0.30001200",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001200.tgz",
+      "integrity": "sha512-ic/jXfa6tgiPBAISWk16jRI2q8YfjxHnSG7ddSL1ptrIP8Uy11SayFrjXRAk3NumHpDb21fdTkbTxb/hOrFrnQ==",
       "dev": true,
       "peer": true
     },
@@ -6333,9 +6333,9 @@
       }
     },
     "node_modules/webpack": {
-      "version": "5.25.0",
-      "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.25.0.tgz",
-      "integrity": "sha512-jqQZopNCzt9c4K6Qa7j6kIhzHfR9wgF84go58VoNp4JbZrBr2D2l5lcv72CW80yc6NJl8CR6OY8xctnIs0r2uw==",
+      "version": "5.25.1",
+      "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.25.1.tgz",
+      "integrity": "sha512-dzFTJwehoLZkeHUkvMSwAgVdGL+PerfX0mke9tOWjJs4OzFctkxCqD8Zj5J387jLkC4gNqSin0/EurhH28boCg==",
       "dev": true,
       "peer": true,
       "dependencies": {
@@ -7167,9 +7167,9 @@
       "dev": true
     },
     "node_modules/yaml": {
-      "version": "1.10.0",
-      "resolved": "https://registry.npmjs.org/yaml/-/yaml-1.10.0.tgz",
-      "integrity": "sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==",
+      "version": "1.10.2",
+      "resolved": "https://registry.npmjs.org/yaml/-/yaml-1.10.2.tgz",
+      "integrity": "sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==",
       "dev": true,
       "engines": {
         "node": ">= 6"
@@ -8079,9 +8079,9 @@
       "dev": true
     },
     "caniuse-lite": {
-      "version": "1.0.30001199",
-      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001199.tgz",
-      "integrity": "sha512-ifbK2eChUCFUwGhlEzIoVwzFt1+iriSjyKKFYNfv6hN34483wyWpLLavYQXhnR036LhkdUYaSDpHg1El++VgHQ==",
+      "version": "1.0.30001200",
+      "resolved": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001200.tgz",
+      "integrity": "sha512-ic/jXfa6tgiPBAISWk16jRI2q8YfjxHnSG7ddSL1ptrIP8Uy11SayFrjXRAk3NumHpDb21fdTkbTxb/hOrFrnQ==",
       "dev": true,
       "peer": true
     },
@@ -12308,9 +12308,9 @@
       }
     },
     "webpack": {
-      "version": "5.25.0",
-      "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.25.0.tgz",
-      "integrity": "sha512-jqQZopNCzt9c4K6Qa7j6kIhzHfR9wgF84go58VoNp4JbZrBr2D2l5lcv72CW80yc6NJl8CR6OY8xctnIs0r2uw==",
+      "version": "5.25.1",
+      "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.25.1.tgz",
+      "integrity": "sha512-dzFTJwehoLZkeHUkvMSwAgVdGL+PerfX0mke9tOWjJs4OzFctkxCqD8Zj5J387jLkC4gNqSin0/EurhH28boCg==",
       "dev": true,
       "peer": true,
       "requires": {
@@ -12949,9 +12949,9 @@
       "dev": true
     },
     "yaml": {
-      "version": "1.10.0",
-      "resolved": "https://registry.npmjs.org/yaml/-/yaml-1.10.0.tgz",
-      "integrity": "sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==",
+      "version": "1.10.2",
+      "resolved": "https://registry.npmjs.org/yaml/-/yaml-1.10.2.tgz",
+      "integrity": "sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==",
       "dev": true
     },
     "yargs": {
