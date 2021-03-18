@@ -13,7 +13,7 @@ module.exports = merge(common, {
   devServer: {
     inline: true,
     index: '',
-    contentBase: Path.join(__dirname, '../assets'),
+    contentBase: Path.join(__dirname, '../../assets'),
     host: process.env.HOST || '127.0.0.1',
     port: process.env.PORT,
     // backend

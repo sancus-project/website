@@ -6,11 +6,11 @@ const Webpack = require('webpack');
 
 module.exports = {
   entry: {
-    'js/index': Path.resolve(__dirname, '../src/js/index.js'),
-    'css/index': Path.resolve(__dirname, '../src/scss/index.scss'),
+    'js/index': Path.resolve(__dirname, '../../src/js/index.js'),
+    'css/index': Path.resolve(__dirname, '../../src/scss/index.scss'),
   },
   output: {
-    path: Path.join(__dirname, '../assets'),
+    path: Path.join(__dirname, '../../assets'),
     filename: '[name].js',
   },
   plugins: [
@@ -21,7 +21,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      '~': Path.resolve(__dirname, '../src')
+      '~': Path.resolve(__dirname, '../../src')
     },
   },
   module: {

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "go+webpack stater template",
   "scripts": {
-    "start": "webpack serve --config webpack/webpack.config.dev.js",
-    "build": "webpack --config webpack/webpack.config.prod.js --color",
+    "start": "webpack serve --config src/webpack/webpack.config.dev.js",
+    "build": "webpack --config src/webpack/webpack.config.prod.js --color",
     "lint": "lint-staged && pretty-quick --staged"
   },
   "lint-staged": {
