@@ -27,6 +27,10 @@ func (c *Router) Compile() error {
 	return nil
 }
 
+func (c Router) Reload() error {
+	return nil
+}
+
 func (c *Router) Handler() http.Handler {
 	// and compose the router
 	r := chi.NewRouter()

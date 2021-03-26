@@ -74,8 +74,13 @@ func main() {
 		for signum := range sig {
 
 			switch signum {
-			case syscall.SIGHUP, syscall.SIGUSR2:
-				// attempt to upgrade on SIGHUP or SIGUSR2
+			case syscall.SIGHUP:
+				// attempt to reload config on SIGHUP
+				if err := r.Reload(); err != nil {
+					log.Println("Reload failed:", err)
+				}
+			case syscall.SIGUSR2:
+				// attempt to upgrade on SIGUSR2
 				if err := upg.Upgrade(); err != nil {
 					log.Println("Upgrade failed:", err)
 				}
