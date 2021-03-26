@@ -117,8 +117,6 @@ $(MODD_CONF_FILES): Makefile
 $(MODD_CONF_FILES):
 	@mkdir -p $(@D)
 	@sed \
-		-e "s|@@PORT@@|$(PORT)|g" \
-		-e "s|@@BACKEND@@|$(DEV_PORT)|g" \
 		-e "s|@@NPM@@|$(NPM)|g" \
 		-e "s|@@GO@@|$(GO)|g" \
 		-e "s|@@GOFMT@@|$(GOFMT) $(GOFMT_FLAGS)|g" \
@@ -135,7 +133,7 @@ dev: $(MODD_DEV_CONF)
 
 run dev: $(MODD) go-deps $(NPM_DEPS)
 run dev:
-	$(MODD) $(MODD_FLAGS) -f $<
+	env PORT=$(PORT) BACKEND=$(DEV_PORT) $(MODD) $(MODD_FLAGS) -f $<
 
 # build
 #
