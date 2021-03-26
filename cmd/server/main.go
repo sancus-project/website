@@ -12,6 +12,8 @@ import (
 
 	"github.com/cloudflare/tableflip"
 	"github.com/pborman/getopt/v2"
+
+	"github.com/amery/go-webpack-starter/web"
 )
 
 var config = NewConfig()
@@ -43,7 +45,7 @@ func main() {
 	// prepare server
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%v", config.Port),
-		Handler:      Router(!config.Development),
+		Handler:      web.Router(!config.Development),
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 		IdleTimeout:  config.IdleTimeout,
