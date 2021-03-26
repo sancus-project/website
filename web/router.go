@@ -1,7 +1,7 @@
 package web
 
 import (
-	"log"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -10,25 +10,30 @@ import (
 	"github.com/amery/go-webpack-starter/html"
 )
 
-func Router(hashify bool) *chi.Mux {
+func (c *Router) Compile() error {
 
 	// bind assets to html templates
 	h, err := html.Files.Clone()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	h.Funcs(assets.Files.FuncMap(hashify, "File"))
+	h.Funcs(assets.Files.FuncMap(c.HashifyAssets, "File"))
 	// compile templates
 	if err := h.Parse(); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
+	c.html = h
+	return nil
+}
+
+func (c *Router) Handler() http.Handler {
 	// and compose the router
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(assets.Middleware(hashify))
-	r.Use(html.Middleware(h))
+	r.Use(assets.Middleware(c.HashifyAssets))
+	r.Use(html.Middleware(c.html))
 	r.MethodFunc("GET", "/", HandleIndex)
 
 	return r

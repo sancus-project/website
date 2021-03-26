@@ -43,9 +43,16 @@ func main() {
 	defer upg.Stop()
 
 	// prepare server
+	r := web.Router{
+		HashifyAssets: !config.Development,
+	}
+	if err := r.Compile(); err != nil {
+		log.Fatal(err)
+	}
+
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%v", config.Port),
-		Handler:      web.Router(!config.Development),
+		Handler:      r.Handler(),
 		ReadTimeout:  config.ReadTimeout,
 		WriteTimeout: config.WriteTimeout,
 		IdleTimeout:  config.IdleTimeout,
