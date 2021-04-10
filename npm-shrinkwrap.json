@@ -1,10 +1,11 @@
 {
-  "name": "go-webpack-starter",
+  "name": "sancus.dev-website",
   "version": "1.0.0",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
+      "name": "sancus.dev-website",
       "version": "1.0.0",
       "license": "MIT",
       "dependencies": {
