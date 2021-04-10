@@ -6,8 +6,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/amery/go-webpack-starter/assets"
-	"github.com/amery/go-webpack-starter/html"
+	"github.com/sancus-project/website/assets"
+	"github.com/sancus-project/website/html"
 )
 
 func (c *Router) Compile() error {

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/tableflip"
 	"github.com/pborman/getopt/v2"
 
-	"github.com/amery/go-webpack-starter/web"
+	"github.com/sancus-project/website/web"
 )
 
 var config = NewConfig()

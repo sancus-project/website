@@ -1,4 +1,4 @@
-module github.com/amery/go-webpack-starter
+module github.com/sancus-project/website
 
 go 1.15
 
