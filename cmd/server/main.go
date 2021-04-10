@@ -44,7 +44,8 @@ func main() {
 
 	// prepare server
 	r := web.Router{
-		HashifyAssets: !config.Development,
+		HashifyAssets:  !config.Development,
+		GoImportConfig: "/etc/go-import.ini",
 	}
 	if err := r.Compile(); err != nil {
 		log.Fatal(err)
