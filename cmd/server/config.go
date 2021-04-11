@@ -11,6 +11,7 @@ const (
 	DefaultWriteTimeout    = 5 * time.Second
 	DefaultIdleTimeout     = 30 * time.Second
 	DefaultGracefulTimeout = 60 * time.Second
+	DefaultGoGetConfigFile = "go-import.ini"
 )
 
 type ServerConfig struct {
@@ -21,6 +22,7 @@ type ServerConfig struct {
 	WriteTimeout    time.Duration
 	IdleTimeout     time.Duration
 	GracefulTimeout time.Duration
+	GoGetConfigFile string
 }
 
 func NewConfig() ServerConfig {
@@ -31,5 +33,6 @@ func NewConfig() ServerConfig {
 		WriteTimeout:    DefaultWriteTimeout,
 		IdleTimeout:     DefaultIdleTimeout,
 		GracefulTimeout: DefaultGracefulTimeout,
+		GoGetConfigFile: DefaultGoGetConfigFile,
 	}
 }

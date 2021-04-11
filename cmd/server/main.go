@@ -22,6 +22,7 @@ func init() {
 	getopt.FlagLong(&config.Development, "dev", 'd', "Don't hashify static files")
 	getopt.FlagLong(&config.Port, "port", 'p', "HTTP port to listen")
 	getopt.FlagLong(&config.PIDFile, "pid", 'f', "Path to PID file")
+	getopt.FlagLong(&config.GoGetConfigFile, "go-get", 'g', "Path to goget .ini file")
 	getopt.FlagLong(&config.GracefulTimeout, "graceful", 't', "Maximum duration to wait for in-flight requests")
 
 	getopt.Parse()
@@ -45,7 +46,7 @@ func main() {
 	// prepare server
 	r := web.Router{
 		HashifyAssets:  !config.Development,
-		GoImportConfig: "/etc/go-import.ini",
+		GoImportConfig: config.GoGetConfigFile,
 	}
 	if err := r.Compile(); err != nil {
 		log.Fatal(err)
