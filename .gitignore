@@ -1,6 +1,8 @@
 # make intermediate files
 #
 /build
+/etc/modd.conf
+/docker-compose.yml
 
 # npm
 #

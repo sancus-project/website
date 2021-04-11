@@ -1,0 +1,29 @@
+# vim: set ft=yaml ts=2 sw=2 et:
+version: '3'
+services:
+
+  @@HOSTNAME@@-web:
+    build:
+      context: ./docker
+      args:
+        - USER_NAME=$USER_NAME
+        - USER_UID=$USER_UID
+        - USER_GID=$USER_GID
+
+    volumes:
+      - "$PWD/etc:/etc:ro"
+      - "$PWD/data:/data"
+      - "$GOPATH/bin:/bin:ro"
+    environment:
+      - PORT
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.@@NAME@@-web.rule=Host(`@@HOSTNAME@@`) || Host(`go.@@HOSTNAME@@`)"
+      - "traefik.http.services.@@NAME@@-web-service.loadbalancer.server.port=${PORT}"
+
+    networks:
+      - @@TRAEFIKNET@@
+
+networks:
+  @@TRAEFIKNET@@:
+    external: true
