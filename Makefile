@@ -179,5 +179,14 @@ go-build: $(GO_FILES) $(GO_DEPS) FORCE
 $(GOBIN)/$(SERVER): $(GO_FILES) $(GO_DEPS)
 	$(GOGET) $(GOGET_FLAGS) ./cmd/$(@F)
 
+# build-image
+.PHONY: build-image start
+
+build-image:
+	USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) docker-compose build --pull
+
+start:
+	USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) docker-compose up
+
 # FORCE
 .PHONY: FORCE

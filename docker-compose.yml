@@ -1,0 +1,30 @@
+# vim: set ft=yaml ts=2 sw=2 et:
+version: '3'
+services:
+
+  sancus:
+    container_name: sancus
+    build:
+      context: ./docker
+      args:
+        - USER_NAME=$USER_NAME
+        - USER_UID=$USER_UID
+        - USER_GID=$USER_GID
+
+    volumes:
+      - "./etc:/etc:ro"
+      - "./data:/data"
+      - "${GOPATH}/bin:/bin:ro"
+    environment:
+      - PORT
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sancus.rule=Host(`sancus.dev`) || Host(`go.sancus.dev`)"
+      - "traefik.http.services.sancus-service.loadbalancer.server.port=${PORT}"
+
+    networks:
+      - traefiknet
+
+networks:
+  traefiknet:
+    external: true
