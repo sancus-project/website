@@ -2,6 +2,7 @@
 
 # locations
 #
+GOPATH ?= $(shell x --root)
 B = $(CURDIR)/build
 GOBIN = $(GOPATH)/bin
 NPX_BIN = $(CURDIR)/node_modules/.bin
@@ -19,6 +20,7 @@ GOFMT_FLAGS = -w -l -s
 GOGET = $(GO) get
 GOGET_FLAGS = -v
 NPM = npm
+
 
 FILE2GO = $(GOBIN)/file2go
 MODD = $(GOBIN)/modd
@@ -180,13 +182,19 @@ $(GOBIN)/$(SERVER): $(GO_FILES) $(GO_DEPS)
 	$(GOGET) $(GOGET_FLAGS) ./cmd/$(@F)
 
 # build-image
-.PHONY: build-image start
+.PHONY: build-image start stop
+
+DOCKER_COMPOSE_ENV = USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) GOPATH=$(GOPATH)
+DOCKER_COMPOSE = env $(DOCKER_COMPOSE_ENV) docker-compose
 
 build-image:
-	USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) docker-compose build --pull
-
+	$(DOCKER_COMPOSE) build --pull 
 start:
-	USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) docker-compose up
+	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) logs -f
+
+stop:
+	$(DOCKER_COMPOSE) down
 
 # FORCE
 .PHONY: FORCE
