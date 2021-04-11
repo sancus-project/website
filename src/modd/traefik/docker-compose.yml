@@ -2,8 +2,7 @@
 version: '3'
 services:
 
-  web:
-    container_name: web
+  @@HOSTNAME@@-web:
     build:
       context: ./docker
       args:
@@ -18,8 +17,8 @@ services:
       - PORT
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sancus.rule=Host(`@@HOSTNAME@@`)"
-      - "traefik.http.services.sancus-service.loadbalancer.server.port=${PORT}"
+      - "traefik.http.routers.@@NAME@@-web.rule=Host(`@@HOSTNAME@@`)"
+      - "traefik.http.services.@@NAME@@-web-service.loadbalancer.server.port=${PORT}"
 
     networks:
       - @@TRAEFIKNET@@

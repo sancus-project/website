@@ -40,6 +40,7 @@ SERVER ?= server
 
 TRAEFIKNET ?= traefiknet
 HOSTNAME ?= example.org
+NAME ?= $(shell echo $(HOSTNAME) | tr '.' '_')
 
 # generated files
 #
@@ -192,14 +193,14 @@ $(GOBIN)/$(SERVER): $(GO_FILES) $(GO_DEPS)
 DOCKER_COMPOSE_ENV = USER_NAME=$(shell id -nu) USER_UID=$(shell id -ru) USER_GID=$(shell id -rg) PORT=$(PORT) GOPATH=$(GOPATH)
 DOCKER_COMPOSE = env $(DOCKER_COMPOSE_ENV) docker-compose
 
-build-image: $(DOCKER_COMPOSE_TRAEFIK)
+build-image: $(DOCKER_COMPOSE_TRAEFIK) $(MODD_TRAEFIK_CONF)
 	$(DOCKER_COMPOSE) build --pull
 
 start: $(DOCKER_COMPOSE_TRAEFIK) $(MODD_TRAEFIK_CONF)
 	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) logs -f
 
-stop:
+stop: $(DOCKER_COMPOSE_TRAEFIK)
 	$(DOCKER_COMPOSE) down --remove-orphans
 
 $(DOCKER_COMPOSE_TRAEFIK): src/modd/traefik/docker-compose.yml
@@ -211,6 +212,7 @@ $(DOCKER_COMPOSE_TRAEFIK) $(MODD_TRAEFIK_CONF):
 	@sed \
 		-e "s|@@SERVER@@|$(SERVER)|g" \
 		-e "s|@@HOSTNAME@@|$(HOSTNAME)|g" \
+		-e "s|@@NAME@@|$(NAME)|g" \
 		-e "s|@@TRAEFIKNET@@|$(TRAEFIKNET)|g" \
 		$< > $@~
 	@mv $@~ $@
