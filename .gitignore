@@ -1,7 +1,14 @@
 # make intermediate files
 #
 /build
+/etc/modd.conf
+/docker-compose.yml
 
 # npm
 #
 /node_modules
+
+# /etc mounted by docker-compose
+/etc/hostname
+/etc/hosts
+/etc/resolv.conf
